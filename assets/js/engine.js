@@ -23,6 +23,11 @@ const state = {
     },
     actions: {
         button: document.getElementById("next-duel")
+    },
+    audios:{
+        win: "win.wav",
+        lose: "lose.wav",
+        background: "egyptian_duel.mp3"
     }
 }
 
@@ -89,13 +94,17 @@ async function setCardsField(cardId) {
     state.fieldCards.player.style.display = "block"
     state.fieldCards.computer.style.display = "block"
 
-    state.fieldCards.player.src = cardData[cardId].img
-    state.fieldCards.computer.src = cardData[computerCardId].img
+    showSelectedCardsInField(cardData[cardId].img, cardData[computerCardId].img)
 
     let duelResults = await checkDuelResults(cardId, computerCardId)
 
     await updateScore()
     await drawButton(duelResults)
+}
+
+async function showSelectedCardsInField(playerCardImg, computerCardImg ){
+    state.fieldCards.player.src = playerCardImg
+    state.fieldCards.computer.src = computerCardImg
 }
 
 async function updateScore(){
@@ -108,17 +117,19 @@ async function drawButton(text) {
 }
 
 async function checkDuelResults(playerCardId, computerCardId) {
-    let duelResults = "Empate"
+    let duelResults = "Draw"
     let playerCard = cardData[playerCardId]
 
     if (playerCard.winOf.includes(computerCardId)) {
-        duelResults = "Ganhou"
+        duelResults = "Win"
         state.score.playerScore++;
+        await playAudio(state.audios.win)
     }
 
     if (playerCard.loseOf.includes(computerCardId)) {
-        duelResults = "Perdeu"
+        duelResults = "Lose"
         state.score.computerScore++;
+        await playAudio(state.audios.lose)
     }
 
     return duelResults
@@ -147,6 +158,28 @@ async function drawCards(cardNumbers, fieldSide) {
 
         document.getElementById(fieldSide).appendChild(cardImage)
     }
+}
+
+async function resetDuel(){
+    state.cardSprite.avatar.src = `${cardPath}card-front.png`
+    state.actions.button.style.display = "none";
+
+    state.fieldCards.player.src = `${cardPath}card-front.png`
+    state.fieldCards.computer.src = `${cardPath}card-front.png`
+
+    await hiddenCardDetails()
+
+    init()
+}
+
+async function hiddenCardDetails(){
+    state.cardSprite.name.innerText = ""
+    state.cardSprite.type.innerText = ""
+}
+
+async function playAudio(duelStatus){
+    const audio = new Audio(`./assets/audios/${duelStatus}`)
+    audio.play()
 }
 
 function init() {

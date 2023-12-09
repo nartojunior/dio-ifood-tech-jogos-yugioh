@@ -100,7 +100,7 @@
 
 #next-duel{
     display: none;
-    border: 2px solid blue;
+    text-transform: uppercase;
 }
 
 .card-box{
@@ -115,9 +115,7 @@
 .card-infield{
     height: 11.2rem;
     width: 8rem;
-    border: 1px solid #fff;
     border-radius: 8px;
-    background-color: aquamarine;
 }
 
 .card{
