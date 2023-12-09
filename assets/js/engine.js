@@ -24,7 +24,7 @@ const state = {
     actions: {
         button: document.getElementById("next-duel")
     },
-    audios:{
+    audios: {
         win: "win.wav",
         lose: "lose.wav",
         background: "egyptian_duel.mp3"
@@ -102,16 +102,16 @@ async function setCardsField(cardId) {
     await drawButton(duelResults)
 }
 
-async function showSelectedCardsInField(playerCardImg, computerCardImg ){
+async function showSelectedCardsInField(playerCardImg, computerCardImg) {
     state.fieldCards.player.src = playerCardImg
     state.fieldCards.computer.src = computerCardImg
 }
 
-async function updateScore(){
+async function updateScore() {
     state.score.scoreBox.innerText = `Win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`
 }
 
-async function drawButton(text) { 
+async function drawButton(text) {
     state.actions.button.innerText = text
     state.actions.button.style.display = "block"
 }
@@ -160,7 +160,7 @@ async function drawCards(cardNumbers, fieldSide) {
     }
 }
 
-async function resetDuel(){
+async function resetDuel() {
     state.cardSprite.avatar.src = `${cardPath}card-front.png`
     state.actions.button.style.display = "none";
 
@@ -172,19 +172,32 @@ async function resetDuel(){
     init()
 }
 
-async function hiddenCardDetails(){
-    state.cardSprite.name.innerText = ""
-    state.cardSprite.type.innerText = ""
+async function hiddenCardDetails() {
+    state.cardSprite.name.innerText = "Selecione"
+    state.cardSprite.type.innerText = "uma carta"
 }
 
-async function playAudio(duelStatus){
+async function playAudio(duelStatus) {
     const audio = new Audio(`./assets/audios/${duelStatus}`)
     audio.play()
 }
 
-function init() {
+async function initDrawCards() {
     drawCards(5, state.playerSides.player1)
     drawCards(5, state.playerSides.computer)
 }
 
-init()
+/** É preciso ter interação do usuário antes de tocar qualquer áudio. */
+/** Usando no botão de iniciar o jogo */
+function initGame(obj){
+    obj.style.display = "none"
+    init()
+}
+
+async function init() {
+    drawCards(5, state.playerSides.player1)
+    drawCards(5, state.playerSides.computer)
+
+    const engineBGM = document.getElementById("bgm")
+    engineBGM.play()   
+}

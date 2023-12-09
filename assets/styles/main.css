@@ -111,6 +111,10 @@ button, a, img:hover, button:hover, a:hover{
     text-transform: uppercase;
 }
 
+#init-btn{
+    text-transform: uppercase;
+}
+
 .card-box{
     height: 9rem;
     width: 100%;
