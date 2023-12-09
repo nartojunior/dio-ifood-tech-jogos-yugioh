@@ -12,17 +12,18 @@ const state = {
         type: document.getElementById("card-type")
     },
     fieldCards: {
-        player: document.getElementById("player-field-card"),
-        computer: document.getElementById("computer-field-card")
+        player: document.getElementById("player-field-cards"),
+        computer: document.getElementById("computer-field-cards")
+    },
+    playerSides: {
+        player1: "player-cards",
+        player1Box: document.querySelector("#player-cards"),
+        computer: "computer-cards",
+        computerBox: document.querySelector("#computer-cards")
     },
     actions: {
         button: document.getElementById("next-duel")
     }
-}
-
-const playerSides = {
-    player1: "player-cards",
-    computer: "computer-cards"
 }
 
 const cardPath = "./assets/icons/"
@@ -60,30 +61,83 @@ async function getRandomCardId() {
 
 }
 
-async function createCardImage(idCard, fieldSide) {
+async function createCardImage(cardId, fieldSide) {
     const cardImage = document.createElement("img")
     cardImage.setAttribute("height", "100px")
     cardImage.setAttribute("src", "./assets/icons/card-back.png")
-    cardImage.setAttribute("data-id", idCard)
+    cardImage.setAttribute("data-id", cardId)
     cardImage.classList.add("card")
 
-    if (fieldSide === playerSides.player1) {
+    if (fieldSide === state.playerSides.player1) {
+        cardImage.addEventListener("mouseover", () => {
+            drawSelectCard(cardId)
+        })
+
         cardImage.addEventListener("click", () => {
             setCardsField(cardImage.getAttribute("data-id"))
         })
     }
 
-    cardImage.addEventListener("mouseover", () => {
-        drawSelectCard(idCard)
-    })
-
     return cardImage
 }
 
-async function drawSelectCard(index){
+async function setCardsField(cardId) {
+    await removeAllCardsImage()
+
+    let computerCardId = await getRandomCardId()
+
+    state.fieldCards.player.style.display = "block"
+    state.fieldCards.computer.style.display = "block"
+
+    state.fieldCards.player.src = cardData[cardId].img
+    state.fieldCards.computer.src = cardData[computerCardId].img
+
+    let duelResults = await checkDuelResults(cardId, computerCardId)
+
+    await updateScore()
+    await drawButton(duelResults)
+}
+
+async function updateScore(){
+    state.score.scoreBox.innerText = `Win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`
+}
+
+async function drawButton(text) { 
+    state.actions.button.innerText = text
+    state.actions.button.style.display = "block"
+}
+
+async function checkDuelResults(playerCardId, computerCardId) {
+    let duelResults = "Empate"
+    let playerCard = cardData[playerCardId]
+
+    if (playerCard.winOf.includes(computerCardId)) {
+        duelResults = "Ganhou"
+        state.score.playerScore++;
+    }
+
+    if (playerCard.loseOf.includes(computerCardId)) {
+        duelResults = "Perdeu"
+        state.score.computerScore++;
+    }
+
+    return duelResults
+}
+
+async function removeAllCardsImage() {
+    let { computerBox, player1Box, } = state.playerSides
+
+    let imgElements = computerBox.querySelectorAll("img")
+    imgElements.forEach((img) => img.remove())
+
+    imgElements = player1Box.querySelectorAll("img")
+    imgElements.forEach((img) => img.remove())
+}
+
+async function drawSelectCard(index) {
     state.cardSprite.avatar.src = cardData[index].img
     state.cardSprite.name.innerText = cardData[index].name
-    state.cardSprite.type.innerText = "Attribute : " + cardData[index].type    
+    state.cardSprite.type.innerText = "Attribute : " + cardData[index].type
 }
 
 async function drawCards(cardNumbers, fieldSide) {
@@ -96,8 +150,8 @@ async function drawCards(cardNumbers, fieldSide) {
 }
 
 function init() {
-    drawCards(5, playerSides.player1)
-    drawCards(5, playerSides.computer)
+    drawCards(5, state.playerSides.player1)
+    drawCards(5, state.playerSides.computer)
 }
 
 init()

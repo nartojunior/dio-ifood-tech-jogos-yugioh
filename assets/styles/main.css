@@ -95,7 +95,7 @@
 }
 
 .versus-bottom{
-    margin-bottom: 1rem;
+    margin-top: 5rem;
 }
 
 #next-duel{
@@ -120,11 +120,16 @@
     background-color: aquamarine;
 }
 
-.card-image{
-    object-fit: scale-down;
+.card{
+    transition: transform .3s;
 }
 
-.card{
-    height: 5rem;
-    background-color: gold;
+.card:hover{
+    transform: scale(1.2);
+}
+
+.menu-avatar img{
+    object-fit: cover;
+    height: 172px;
+
 }
