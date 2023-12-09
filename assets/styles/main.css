@@ -1,5 +1,13 @@
 @import url(imports.css);
 
+body{
+    cursor: url("../cursor/yugicursor.png"), default;
+}
+
+button, a, img:hover, button:hover, a:hover{
+    cursor: url("../cursor/yamiyugicursorGLOW.png"), default;
+}
+
 .bg-video{
     position: absolute;
     z-index: -2;
