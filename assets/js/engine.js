@@ -25,7 +25,7 @@ const playerSides = {
     computer: "computer-cards"
 }
 
-const cardPath = "./assets/icon/"
+const cardPath = "./assets/icons/"
 
 const cardData = [
     {
@@ -83,7 +83,7 @@ async function createCardImage(idCard, fieldSide) {
 async function drawSelectCard(index){
     state.cardSprite.avatar.src = cardData[index].img
     state.cardSprite.name.innerText = cardData[index].name
-    //state.cardSprite.type.innerText = "Attribute : " + cardData[index].type    
+    state.cardSprite.type.innerText = "Attribute : " + cardData[index].type    
 }
 
 async function drawCards(cardNumbers, fieldSide) {
