@@ -199,5 +199,6 @@ async function init() {
     drawCards(5, state.playerSides.computer)
 
     const engineBGM = document.getElementById("bgm")
+    engineBGM.volume = 0.4
     engineBGM.play()   
 }
